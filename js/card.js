@@ -1,3 +1,6 @@
+import { showPokemonSidebar } from "./sidebar.js";
+import { createStarElement } from "./favorites.js";
+
 function capitalize(word) {
   if (!word) return "";
   return word.charAt(0).toUpperCase() + word.slice(1);
@@ -6,7 +9,7 @@ function capitalize(word) {
 export async function getPokemonList() {
   const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
   const data = await res.json();
-  return data.results; // Array of { name, url }
+  return data.results;
 }
 
 export async function getPokemonDetails(url) {
@@ -20,9 +23,8 @@ export async function renderPokemonCards() {
 
   try {
     const list = await getPokemonList();
-    pokedex.innerHTML = ""; // Clear loading message
+    pokedex.innerHTML = "";
 
-    // Create a document fragment to improve performance
     const fragment = document.createDocumentFragment();
 
     for (const pokemon of list) {
@@ -41,35 +43,27 @@ export function createPokemonCard(pokemon) {
   const card = document.createElement("div");
   card.className = "pokemon-card";
 
-  card.innerHTML = `
-    <h2>${pokemon.name}</h2>
+  const cardHeader = document.createElement("div");
+  cardHeader.className = "card-header";
+
+  const title = document.createElement("h2");
+  title.textContent = pokemon.name;
+
+  cardHeader.appendChild(title);
+  cardHeader.appendChild(createStarElement(pokemon));
+
+  const content = document.createElement("div");
+  content.innerHTML = `
     <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}">
     <p>Type: ${pokemon.types.map((t) => capitalize(t.type.name)).join(", ")}</p>
   `;
+
+  card.appendChild(cardHeader);
+  card.appendChild(content);
 
   card.addEventListener("click", () => {
     showPokemonSidebar(pokemon);
   });
 
   return card;
-}
-
-function showPokemonSidebar(pokemon) {
-  const sidebar = document.getElementById("sidebar");
-  const sidebarContent = document.getElementById("sidebarContent");
-
-  sidebarContent.innerHTML = `
-    <h2>${capitalize(pokemon.name)}</h2>
-    <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}">
-    <p><strong>Types:</strong> ${pokemon.types
-      .map((t) => capitalize(t.type.name))
-      .join(", ")}</p>
-    <p><strong>HP:</strong> ${pokemon.stats[0].base_stat}</p>
-    <p><strong>Attack:</strong> ${pokemon.stats[1].base_stat}</p>
-    <p><strong>Defense:</strong> ${pokemon.stats[2].base_stat}</p>
-    <p><strong>Speed:</strong> ${pokemon.stats[5].base_stat}</p>
-  `;
-
-  sidebar.classList.add("show");
-  sidebar.classList.remove("hidden");
 }

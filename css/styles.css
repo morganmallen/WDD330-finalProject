@@ -112,12 +112,101 @@ footer {
   display: none;
 }
 
-#closeSidebar {
-  background: none;
-  border: none;
+/* Backdrop styling */
+#sidebar-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+}
+
+#sidebar-backdrop.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.card-header h2 {
+  margin: 0;
+  text-transform: capitalize;
+}
+
+/* Sidebar header with title and star */
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.sidebar-header h2 {
+  margin: 0;
+}
+
+/* Star styling */
+.star-container {
+  display: flex;
+  align-items: center;
+}
+
+.star {
   font-size: 1.5rem;
   cursor: pointer;
-  float: right;
+  user-select: none;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.star:hover {
+  transform: scale(1.2);
+}
+
+.star.favorite {
+  color: gold;
+}
+
+/* Favorites page styling */
+.page-title {
+  text-align: center;
+  margin: 20px 0;
+}
+
+#favorites-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.no-favorites {
+  text-align: center;
+  margin: 50px auto;
+  max-width: 500px;
+  padding: 20px;
+  background-color: #333;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.no-favorites a {
+  color: #ef5350;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.no-favorites a:hover {
+  text-decoration: underline;
 }
 
 @media (prefers-color-scheme: light) {
@@ -133,6 +222,15 @@ footer {
     color: #213547;
   }
   .pokemon-card {
+    background-color: #f0f0f0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  .sidebar {
+    background: #f0f0f0;
+    color: #213547;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  }
+  .no-favorites {
     background-color: #f0f0f0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
