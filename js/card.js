@@ -1,3 +1,8 @@
+function capitalize(word) {
+  if (!word) return "";
+  return word.charAt(0).toUpperCase() + word.slice(1);
+}
+
 export async function getPokemonList() {
   const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
   const data = await res.json();
@@ -37,11 +42,34 @@ export function createPokemonCard(pokemon) {
   card.className = "pokemon-card";
 
   card.innerHTML = `
-      <h2>${pokemon.name}</h2>
-      <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}">
-      <p>Type: ${pokemon.types.map((t) => t.type.name).join(", ")}</p>
-      <p>HP: ${pokemon.stats[0].base_stat}</p>
-    `;
+    <h2>${pokemon.name}</h2>
+    <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}">
+    <p>Type: ${pokemon.types.map((t) => capitalize(t.type.name)).join(", ")}</p>
+  `;
+
+  card.addEventListener("click", () => {
+    showPokemonSidebar(pokemon);
+  });
 
   return card;
+}
+
+function showPokemonSidebar(pokemon) {
+  const sidebar = document.getElementById("sidebar");
+  const sidebarContent = document.getElementById("sidebarContent");
+
+  sidebarContent.innerHTML = `
+    <h2>${capitalize(pokemon.name)}</h2>
+    <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}">
+    <p><strong>Types:</strong> ${pokemon.types
+      .map((t) => capitalize(t.type.name))
+      .join(", ")}</p>
+    <p><strong>HP:</strong> ${pokemon.stats[0].base_stat}</p>
+    <p><strong>Attack:</strong> ${pokemon.stats[1].base_stat}</p>
+    <p><strong>Defense:</strong> ${pokemon.stats[2].base_stat}</p>
+    <p><strong>Speed:</strong> ${pokemon.stats[5].base_stat}</p>
+  `;
+
+  sidebar.classList.add("show");
+  sidebar.classList.remove("hidden");
 }
