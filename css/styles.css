@@ -3,7 +3,6 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
 
@@ -112,7 +111,6 @@ footer {
   display: none;
 }
 
-/* Backdrop styling */
 #sidebar-backdrop {
   position: fixed;
   top: 0;
@@ -143,7 +141,6 @@ footer {
   text-transform: capitalize;
 }
 
-/* Sidebar header with title and star */
 .sidebar-header {
   display: flex;
   justify-content: space-between;
@@ -155,7 +152,6 @@ footer {
   margin: 0;
 }
 
-/* Star styling */
 .star-container {
   display: flex;
   align-items: center;
@@ -176,7 +172,6 @@ footer {
   color: gold;
 }
 
-/* Favorites page styling */
 .page-title {
   text-align: center;
   margin: 20px 0;
@@ -209,29 +204,63 @@ footer {
   text-decoration: underline;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  .header,
-  footer {
-    background-color: #f0f0f0;
-  }
-  .header a {
-    color: #213547;
-  }
-  .pokemon-card {
-    background-color: #f0f0f0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  .sidebar {
-    background: #f0f0f0;
-    color: #213547;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  }
-  .no-favorites {
-    background-color: #f0f0f0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
+.search-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  max-width: 400px;
+  margin: 0 20px;
+}
+
+#search-form {
+  display: flex;
+  width: 100%;
+  position: relative;
+}
+
+#search-input {
+  width: 100%;
+  padding: 8px 40px 8px 12px;
+  border: none;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+#search-input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+#search-input:focus {
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+#search-form button {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-size: 1rem;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.no-results {
+  text-align: center;
+  margin: 50px auto;
+  max-width: 500px;
+  padding: 20px;
+  background-color: #333;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
