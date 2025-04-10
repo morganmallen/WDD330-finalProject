@@ -40,7 +40,7 @@ async function loadPokemonDetails() {
     }
 
     const pokemon = await response.json();
-    console.log(pokemon)
+    console.log(pokemon);
 
     try {
       const cacheKey = `pokemon-${pokemon.id}`;
@@ -57,6 +57,7 @@ async function loadPokemonDetails() {
             },
             height: pokemon.height,
             weight: pokemon.weight,
+            abilities: pokemon.abilities,
           },
           timestamp: Date.now(),
         })
@@ -107,16 +108,18 @@ function renderPokemonDetails(pokemon, container) {
   `;
 
   const abilitySection = document.createElement("div");
-  abilitySection.className = "pokemon-abilitys";
+  abilitySection.className = "pokemon-abilities";
   abilitySection.innerHTML = `
     <h3>Abilities</h3>
-    <div class="type-badges">
+    <div>
       ${pokemon.abilities
         .map(
-          (t) =>
-            `<span class="type-badge ${t.type.name}">${capitalize(
-              t.type.name
-            )}</span>`
+          (ability) =>
+            `<span class="type-badge ${
+              ability.is_hidden ? "hidden-ability" : ""
+            }">${capitalize(ability.ability.name.replace("-", " "))}${
+              ability.is_hidden ? " (Hidden)" : ""
+            }</span>`
         )
         .join("")}
     </div>
@@ -179,6 +182,22 @@ function renderPokemonDetails(pokemon, container) {
     </div>
   `;
 
+  const moveSection = document.createElement("div");
+  moveSection.className = "pokemon-move";
+  moveSection.innerHTML = `
+    <h3>Moves</h3>
+    <div class="info-grid">
+        ${pokemon.moves.map(
+          (move) =>
+            `<div class="info-item">
+                <span class="info-value">
+                    ${capitalize(move.move.name)}
+                </span>
+            </div>`
+        ).join("")}
+    </div>
+  `;
+
   const backButton = document.createElement("button");
   backButton.className = "back-button";
   backButton.textContent = "← Back to Pokédex";
@@ -189,8 +208,10 @@ function renderPokemonDetails(pokemon, container) {
   pokemonDetails.appendChild(headerSection);
   pokemonDetails.appendChild(imageSection);
   pokemonDetails.appendChild(typeSection);
+  pokemonDetails.appendChild(abilitySection);
   pokemonDetails.appendChild(statsSection);
   pokemonDetails.appendChild(infoSection);
+  pokemonDetails.appendChild(moveSection);
   pokemonDetails.appendChild(backButton);
 
   while (container.childNodes.length > 1) {

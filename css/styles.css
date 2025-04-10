@@ -412,6 +412,7 @@ footer {
   margin-bottom: 30px;
 }
 
+/* types */
 .type-badges {
   display: flex;
   gap: 10px;
@@ -483,6 +484,8 @@ footer {
   background-color: #ee99ac;
 }
 
+/* stats */
+
 .stats-grid {
   display: grid;
   gap: 12px;
@@ -523,6 +526,8 @@ footer {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
 }
 
+/* info */
+
 .info-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -562,4 +567,10 @@ footer {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* abilities */
+.hidden-ability {
+  background-color: #9370db; 
+  font-style: italic;
 }
