@@ -13,7 +13,6 @@ export function showPokemonSidebar(pokemon) {
   title.textContent = pokemonName;
 
   header.appendChild(title);
-  header.appendChild(createStarElement(pokemon, (isFavorite) => {}));
 
   sidebarContent.innerHTML = "";
   sidebarContent.appendChild(header);
@@ -27,6 +26,8 @@ export function showPokemonSidebar(pokemon) {
     <p><strong>HP:</strong> ${pokemon.stats[0].base_stat}</p>
     <p><strong>Attack:</strong> ${pokemon.stats[1].base_stat}</p>
     <p><strong>Defense:</strong> ${pokemon.stats[2].base_stat}</p>
+    <p><strong>Special Attack:</strong> ${pokemon.stats[3].base_stat}</p>
+    <p><strong>Special Defense:</strong> ${pokemon.stats[4].base_stat}</p>
     <p><strong>Speed:</strong> ${pokemon.stats[5].base_stat}</p>
   `;
 
@@ -37,6 +38,8 @@ export function showPokemonSidebar(pokemon) {
   sidebar.classList.remove("hidden");
   void sidebar.offsetWidth;
   sidebar.classList.add("show");
+
+  console.log(pokemon.stats);
 }
 
 export function initSidebar() {

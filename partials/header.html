@@ -16,10 +16,42 @@
       </button>
     </form>
   </div>
+  <div class="filter-dropdown">
+    <button id="filter-button" aria-label="Filter">
+      <span>🔍</span> Filter
+    </button>
+    <div class="filter-menu" id="filter-menu">
+      <div class="filter-group">
+        <label for="stat-type">Stat:</label>
+        <select id="stat-type">
+          <option value="hp">HP</option>
+          <option value="attack">Attack</option>
+          <option value="defense">Defense</option>
+          <option value="special attack">Special Attack</option>
+          <option value="special defense">Special Defense</option>
+          <option value="speed">Speed</option>
+        </select>
+
+        <select id="stat-comparison">
+          <option value="greater">Greater than</option>
+          <option value="less">Less than</option>
+        </select>
+
+        <input type="number" id="stat-value" min="1" max="255" value="50" />
+      </div>
+
+      <div class="filter-actions">
+        <button id="apply-filters" type="button">Apply</button>
+        <button id="reset-filters" type="button">Reset</button>
+      </div>
+    </div>
+  </div>
   <div>
-    <nav>
-      <a href="/index.html">Home</a>
-      <a href="/pages/favorites.html">Favorites</a>
-    </nav>
+    <div>
+      <nav>
+        <a href="/index.html">Home</a>
+        <a href="/pages/favorites.html">Favorites</a>
+      </nav>
+    </div>
   </div>
 </div>

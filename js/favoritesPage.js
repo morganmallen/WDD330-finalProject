@@ -2,11 +2,13 @@ import { loadHeaderFooter } from "../js/utils.js";
 import { createPokemonCard } from "../js/card.js";
 import { initSidebar } from "../js/sidebar.js";
 import { getFavorites } from "../js/favorites.js";
+import { initFilters } from "./filter.js";
 
 async function initFavoritesPage() {
   await loadHeaderFooter();
   initSidebar();
   renderFavorites();
+  initFilters();
 }
 
 async function renderFavorites() {
