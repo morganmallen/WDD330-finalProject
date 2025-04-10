@@ -50,7 +50,8 @@ export async function applyFilters() {
   pokedex.innerHTML = '<div class="loading">Applying filters...</div>';
 
   try {
-    let pokemonList;
+    let pokemonList = [];
+    const { getPokemonList, getPokemonDetails } = await import("./card.js");
 
     if (window.location.pathname.includes("favorites")) {
       const favorites = JSON.parse(
@@ -58,25 +59,41 @@ export async function applyFilters() {
       );
 
       const detailedFavorites = await Promise.all(
-        favorites.map((fav) =>
-          fetch(`https://pokeapi.co/api/v2/pokemon/${fav.id}`).then((res) =>
-            res.json()
-          )
-        )
+        favorites.map((fav) => {
+          const cacheKey = `pokemon-${fav.id}`;
+          const cached = localStorage.getItem(cacheKey);
+
+          if (cached) {
+            const { data, timestamp } = JSON.parse(cached);
+            if (Date.now() - timestamp < 24 * 60 * 60 * 1000) {
+              return Promise.resolve(data);
+            }
+          }
+
+          return fetch(`https://pokeapi.co/api/v2/pokemon/${fav.id}`)
+            .then((res) => res.json())
+            .then((data) => {
+              localStorage.setItem(
+                cacheKey,
+                JSON.stringify({
+                  data,
+                  timestamp: Date.now(),
+                })
+              );
+              return data;
+            });
+        })
       );
 
       pokemonList = detailedFavorites;
     } else {
-      const response = await fetch(
-        "https://pokeapi.co/api/v2/pokemon?limit=151"
-      );
-      const data = await response.json();
+      const allPokemon = await getPokemonList();
 
-      pokemonList = await Promise.all(
-        data.results.map((pokemon) =>
-          fetch(pokemon.url).then((res) => res.json())
-        )
+      const allDetails = await Promise.all(
+        allPokemon.map((pokemon) => getPokemonDetails(pokemon.url))
       );
+
+      pokemonList = allDetails;
     }
 
     if (statValue && !isNaN(statValue)) {
@@ -92,10 +109,10 @@ export async function applyFilters() {
           case "defense":
             statIndex = 2;
             break;
-            case "special attack":
+          case "special-attack":
             statIndex = 3;
             break;
-            case "special defense":
+          case "special-defense":
             statIndex = 4;
             break;
           case "speed":
@@ -122,13 +139,12 @@ export async function applyFilters() {
     }
 
     const fragment = document.createDocumentFragment();
-
     const { createPokemonCard } = await import("./card.js");
 
-    for (const pokemon of pokemonList) {
+    pokemonList.forEach((pokemon) => {
       const card = createPokemonCard(pokemon);
       fragment.appendChild(card);
-    }
+    });
 
     pokedex.appendChild(fragment);
   } catch (error) {
@@ -143,7 +159,7 @@ export function resetFilters() {
 
   if (!window.location.pathname.includes("favorites")) {
     import("./card.js").then((module) => {
-      module.renderPokemonCards();
+      module.renderPokemonCards(1);
     });
   } else {
     import("./favoritesPage.js").then((module) => {

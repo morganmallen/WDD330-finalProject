@@ -1,5 +1,8 @@
-import { createPokemonCard } from "./card.js";
-import { getPokemonList, getPokemonDetails } from "./card.js";
+import {
+  createPokemonCard,
+  getPokemonList,
+  getPokemonDetails,
+} from "./card.js";
 
 export function initSearch() {
   const searchForm = document.getElementById("search-form");
@@ -17,9 +20,16 @@ export function initSearch() {
       }
     });
 
+    let debounceTimeout;
     searchInput.addEventListener("input", (e) => {
+      clearTimeout(debounceTimeout);
+
       if (e.target.value === "") {
         resetSearch();
+      } else if (e.target.value.length >= 2) {
+        debounceTimeout = setTimeout(() => {
+          performSearch(e.target.value.trim().toLowerCase());
+        }, 300);
       }
     });
   }
@@ -42,14 +52,18 @@ async function performSearch(searchTerm) {
     }
 
     pokedex.innerHTML = "";
-
     const fragment = document.createDocumentFragment();
 
-    for (const pokemon of filteredList) {
-      const details = await getPokemonDetails(pokemon.url);
-      const card = createPokemonCard(details);
+    const pokemonDetailsPromises = filteredList.map((pokemon) =>
+      getPokemonDetails(pokemon.url)
+    );
+
+    const pokemonDetails = await Promise.all(pokemonDetailsPromises);
+
+    pokemonDetails.forEach((pokemon) => {
+      const card = createPokemonCard(pokemon);
       fragment.appendChild(card);
-    }
+    });
 
     pokedex.appendChild(fragment);
   } catch (error) {
@@ -58,24 +72,6 @@ async function performSearch(searchTerm) {
 }
 
 async function resetSearch() {
-  const pokedex = document.getElementById("pokedex");
-  pokedex.innerHTML = '<div class="loading">Loading all Pokémon...</div>';
-
-  try {
-    const pokemonList = await getPokemonList();
-
-    pokedex.innerHTML = "";
-
-    const fragment = document.createDocumentFragment();
-
-    for (const pokemon of pokemonList) {
-      const details = await getPokemonDetails(pokemon.url);
-      const card = createPokemonCard(details);
-      fragment.appendChild(card);
-    }
-
-    pokedex.appendChild(fragment);
-  } catch (error) {
-    pokedex.innerHTML = `<div class="error">Error loading Pokémon: ${error.message}</div>`;
-  }
+  const { renderPokemonCards } = await import("./card.js");
+  renderPokemonCards(1);
 }

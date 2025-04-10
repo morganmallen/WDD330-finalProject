@@ -39,7 +39,7 @@ export function showPokemonSidebar(pokemon) {
   void sidebar.offsetWidth;
   sidebar.classList.add("show");
 
-  console.log(pokemon.stats);
+  console.log(pokemon);
 }
 
 export function initSidebar() {
