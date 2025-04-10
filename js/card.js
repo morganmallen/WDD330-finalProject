@@ -1,4 +1,3 @@
-import { showPokemonSidebar } from "./sidebar.js";
 import { createStarElement } from "./favorites.js";
 
 function capitalize(word) {
@@ -251,9 +250,16 @@ export function createPokemonCard(pokemon) {
   card.appendChild(cardHeader);
   card.appendChild(content);
 
+  // Update to navigate to the pokemon page instead of opening sidebar
   card.addEventListener("click", () => {
-    showPokemonSidebar(pokemon);
+    navigateToPokemonPage(pokemon.id);
   });
 
   return card;
+}
+
+function navigateToPokemonPage(pokemonId) {
+  const isInRoot = !window.location.pathname.includes("/pages/");
+  const pathPrefix = isInRoot ? "./pages/" : "./";
+  window.location.href = `${pathPrefix}pokemon.html?id=${pokemonId}`;
 }
