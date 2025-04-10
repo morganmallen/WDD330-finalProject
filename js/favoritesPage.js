@@ -36,7 +36,6 @@ async function renderFavorites() {
     const fragment = document.createDocumentFragment();
     const progressBar = document.querySelector(".progress");
 
-    // Create a cache key for each favorite Pokémon
     const pokemonPromises = favorites.map((favorite) => {
       const cacheKey = `pokemon-${favorite.id}`;
       let cachedData = null;
@@ -50,7 +49,6 @@ async function renderFavorites() {
       if (cachedData) {
         try {
           const { data, timestamp } = JSON.parse(cachedData);
-          // Check if cache is still valid (24 hours)
           if (Date.now() - timestamp < 24 * 60 * 60 * 1000) {
             return Promise.resolve(data);
           }
@@ -59,11 +57,9 @@ async function renderFavorites() {
         }
       }
 
-      // Fetch if not in cache
       return fetch(`https://pokeapi.co/api/v2/pokemon/${favorite.id}`)
         .then((res) => res.json())
         .then((data) => {
-          // Only store essential data
           const essentialData = {
             id: data.id,
             name: data.name,
@@ -76,7 +72,6 @@ async function renderFavorites() {
             weight: data.weight,
           };
 
-          // Try to cache, but continue if it fails
           try {
             localStorage.setItem(
               cacheKey,
@@ -87,14 +82,12 @@ async function renderFavorites() {
             );
           } catch (error) {
             console.warn(`Could not cache Pokémon ${data.name}:`, error);
-            // No need to clear cache here as we're only loading favorites
           }
 
           return data;
         });
     });
 
-    // Track progress
     let completed = 0;
     const updateProgress = () => {
       completed++;
@@ -104,7 +97,6 @@ async function renderFavorites() {
       }
     };
 
-    // Process details as they resolve
     const pokemonDetails = await Promise.all(
       pokemonPromises.map((promise) =>
         promise
@@ -115,12 +107,11 @@ async function renderFavorites() {
           .catch((error) => {
             updateProgress();
             console.error("Error fetching favorite Pokémon:", error);
-            return null; // Return null for failed requests
+            return null;
           })
       )
     );
 
-    // Create cards for each favorite Pokémon (filter out nulls from failed requests)
     pokemonDetails.filter(Boolean).forEach((pokemon) => {
       const card = createPokemonCard(pokemon);
       fragment.appendChild(card);

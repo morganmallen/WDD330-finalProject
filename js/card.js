@@ -5,9 +5,7 @@ function capitalize(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
-const CACHE_KEY = "pokemon-cache";
 const CACHE_EXPIRY = 24 * 60 * 60 * 1000;
-const MAX_CACHE_ITEMS = 50;
 
 export async function getPokemonList() {
   const cachedData = getFromCache("pokemon-list");
@@ -250,7 +248,6 @@ export function createPokemonCard(pokemon) {
   card.appendChild(cardHeader);
   card.appendChild(content);
 
-  // Update to navigate to the pokemon page instead of opening sidebar
   card.addEventListener("click", () => {
     navigateToPokemonPage(pokemon.id);
   });
@@ -259,7 +256,12 @@ export function createPokemonCard(pokemon) {
 }
 
 function navigateToPokemonPage(pokemonId) {
-  const isInRoot = !window.location.pathname.includes("/pages/");
-  const pathPrefix = isInRoot ? "./pages/" : "./";
+  const currentPath = window.location.pathname;
+  let pathPrefix = "./";
+
+  if (!currentPath.includes("/pages/")) {
+    pathPrefix = "./pages/";
+  }
+
   window.location.href = `${pathPrefix}pokemon.html?id=${pokemonId}`;
 }

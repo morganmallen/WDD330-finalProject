@@ -17,7 +17,13 @@ async function loadPokemonDetails() {
   }
 
   const contentArea = document.querySelector("main");
+  if (!contentArea) {
+    console.error("Main content area not found");
+    return;
+  }
+
   contentArea.innerHTML = `
+    <h1 class="page-title">Loading...</h1>
     <div class="loading">
       Loading Pokémon details... 
       <div class="progress-bar">
@@ -34,8 +40,8 @@ async function loadPokemonDetails() {
     }
 
     const pokemon = await response.json();
+    console.log(pokemon)
 
-    // Cache the pokemon details
     try {
       const cacheKey = `pokemon-${pokemon.id}`;
       localStorage.setItem(
@@ -67,7 +73,14 @@ async function loadPokemonDetails() {
 
 function renderPokemonDetails(pokemon, container) {
   const pageTitle = document.querySelector(".page-title");
-  pageTitle.textContent = capitalize(pokemon.name);
+  if (pageTitle) {
+    pageTitle.textContent = capitalize(pokemon.name);
+  } else {
+    const titleElement = document.createElement("h1");
+    titleElement.className = "page-title";
+    titleElement.textContent = capitalize(pokemon.name);
+    container.insertBefore(titleElement, container.firstChild);
+  }
 
   const pokemonDetails = document.createElement("div");
   pokemonDetails.className = "pokemon-details";
@@ -91,6 +104,22 @@ function renderPokemonDetails(pokemon, container) {
   imageSection.className = "pokemon-image-container";
   imageSection.innerHTML = `
     <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}" class="pokemon-image">
+  `;
+
+  const abilitySection = document.createElement("div");
+  abilitySection.className = "pokemon-abilitys";
+  abilitySection.innerHTML = `
+    <h3>Abilities</h3>
+    <div class="type-badges">
+      ${pokemon.abilities
+        .map(
+          (t) =>
+            `<span class="type-badge ${t.type.name}">${capitalize(
+              t.type.name
+            )}</span>`
+        )
+        .join("")}
+    </div>
   `;
 
   const typeSection = document.createElement("div");
@@ -164,7 +193,9 @@ function renderPokemonDetails(pokemon, container) {
   pokemonDetails.appendChild(infoSection);
   pokemonDetails.appendChild(backButton);
 
-  container.innerHTML = "";
+  while (container.childNodes.length > 1) {
+    container.removeChild(container.lastChild);
+  }
   container.appendChild(pokemonDetails);
 }
 
@@ -175,7 +206,10 @@ function capitalize(word) {
 
 function displayError(message) {
   const contentArea = document.querySelector("main");
+  if (!contentArea) return;
+
   contentArea.innerHTML = `
+    <h1 class="page-title">Error</h1>
     <div class="error">
       ${message}
       <button class="back-button" onclick="window.history.back()">← Back to Pokédex</button>
@@ -184,8 +218,7 @@ function displayError(message) {
 }
 
 function initFilters() {
-  // Import the filter module
-  import("./filter.js").then((module) => {
+  import("../js/filter.js").then((module) => {
     module.initFilters();
   });
 }
