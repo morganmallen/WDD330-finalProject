@@ -240,10 +240,21 @@ export function createPokemonCard(pokemon) {
   cardHeader.appendChild(createStarElement(pokemon));
 
   const content = document.createElement("div");
+  const typeBadges = pokemon.types
+    .map(
+      (t) =>
+        `<span class="type-badge ${t.type.name}">${capitalize(
+          t.type.name
+        )}</span>`
+    )
+    .join("");
+
   content.innerHTML = `
-    <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}">
-    <p>Type: ${pokemon.types.map((t) => capitalize(t.type.name)).join(", ")}</p>
-  `;
+  <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}">
+    <div class="type-badges" style="display: flex; justify-content: center; gap: 10px; margin-top: 5px;">
+    ${typeBadges}
+  </div>
+`;
 
   card.appendChild(cardHeader);
   card.appendChild(content);
