@@ -1,3 +1,4 @@
+// sets up the event listeners for the filter menu
 export function initFilters() {
   const filterButton = document.getElementById("filter-button");
   const filterMenu = document.getElementById("filter-menu");
@@ -36,11 +37,13 @@ export function initFilters() {
   }
 }
 
+// applies the selected filter to the current Pokemon list
 export async function applyFilters() {
   const statType = document.getElementById("stat-type").value;
   const comparison = document.getElementById("stat-comparison").value;
   const statValue = parseInt(document.getElementById("stat-value").value);
 
+  //checks if on the home or favorites page
   const pokedex =
     document.getElementById("pokedex") ||
     document.getElementById("favorites-container");
@@ -96,6 +99,7 @@ export async function applyFilters() {
       pokemonList = allDetails;
     }
 
+    //filters the pokemon depending on the stat
     if (statValue && !isNaN(statValue)) {
       pokemonList = pokemonList.filter((pokemon) => {
         let statIndex;
@@ -152,6 +156,7 @@ export async function applyFilters() {
   }
 }
 
+//resets the filter to the default display
 export function resetFilters() {
   document.getElementById("stat-type").value = "hp";
   document.getElementById("stat-comparison").value = "greater";

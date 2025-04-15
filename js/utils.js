@@ -13,7 +13,7 @@ export async function loadTemplate(path) {
   const template = await res.text();
   return template;
 }
-
+//Displays the header and the footer on each page. Also ensures that the header and footer partials are found in the project.
 export async function loadHeaderFooter() {
   const isInRoot = !window.location.pathname.includes("/pages/");
 
@@ -38,6 +38,7 @@ export async function loadHeaderFooter() {
   }
 }
 
+//fixes paths for navigation based on current location
 function fixPaths() {
   const isInRoot = !window.location.pathname.includes("/pages/");
   const pathPrefix = isInRoot ? "./" : "../";

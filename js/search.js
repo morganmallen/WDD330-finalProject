@@ -4,6 +4,7 @@ import {
   getPokemonDetails,
 } from "./card.js";
 
+//sets up event listeners for the search form
 export function initSearch() {
   const searchForm = document.getElementById("search-form");
   const searchInput = document.getElementById("search-input");
@@ -35,6 +36,7 @@ export function initSearch() {
   }
 }
 
+// searches for pokemon based on the inputted name
 async function performSearch(searchTerm) {
   const pokedex = document.getElementById("pokedex");
   pokedex.innerHTML = '<div class="loading">Searching for Pokémon...</div>';
@@ -71,6 +73,7 @@ async function performSearch(searchTerm) {
   }
 }
 
+//resets the search bar and displays all pokemon
 async function resetSearch() {
   const { renderPokemonCards } = await import("./card.js");
   renderPokemonCards(1);

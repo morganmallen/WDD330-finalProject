@@ -3,12 +3,14 @@ import { createPokemonCard } from "../js/card.js";
 import { getFavorites } from "../js/favorites.js";
 import { initFilters } from "./filter.js";
 
+//Initializes the page by rendering the header, footer, and favorites.
 async function initFavoritesPage() {
   await loadHeaderFooter();
   renderFavorites();
   initFilters();
 }
 
+//renders the favorite pokemon to the favorites page
 async function renderFavorites() {
   const container = document.getElementById("favorites-container");
   container.innerHTML = `
@@ -57,6 +59,7 @@ async function renderFavorites() {
         }
       }
 
+      //fetches the favorite pokemon's data
       return fetch(`https://pokeapi.co/api/v2/pokemon/${favorite.id}`)
         .then((res) => res.json())
         .then((data) => {

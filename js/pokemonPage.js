@@ -1,12 +1,13 @@
 import { loadHeaderFooter } from "../js/utils.js";
 import { createStarElement } from "../js/favorites.js";
 
+//renders page with the header, footer, pokemon details, and filters
 async function initPokemonPage() {
   await loadHeaderFooter();
   await loadPokemonDetails();
-  initFilters();
 }
 
+// fetches and loads the information for the specific pokemon
 async function loadPokemonDetails() {
   const urlParams = new URLSearchParams(window.location.search);
   const pokemonId = urlParams.get("id");
@@ -21,7 +22,7 @@ async function loadPokemonDetails() {
     console.error("Main content area not found");
     return;
   }
-
+  //loading screen
   contentArea.innerHTML = `
     <h1 class="page-title">Loading...</h1>
     <div class="loading">
@@ -40,7 +41,6 @@ async function loadPokemonDetails() {
     }
 
     const pokemon = await response.json();
-    console.log(pokemon);
 
     try {
       const cacheKey = `pokemon-${pokemon.id}`;
@@ -72,6 +72,7 @@ async function loadPokemonDetails() {
   }
 }
 
+// displays the pokemon details on the page
 function renderPokemonDetails(pokemon, container) {
   const pageTitle = document.querySelector(".page-title");
   if (pageTitle) {
@@ -101,12 +102,13 @@ function renderPokemonDetails(pokemon, container) {
 
   headerSection.appendChild(nameContainer);
 
+  //pokemon image
   const imageSection = document.createElement("div");
   imageSection.className = "pokemon-image-container";
   imageSection.innerHTML = `
     <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}" class="pokemon-image">
   `;
-
+  //abilities section
   const abilitySection = document.createElement("div");
   abilitySection.className = "pokemon-abilities";
   abilitySection.innerHTML = `
@@ -125,6 +127,7 @@ function renderPokemonDetails(pokemon, container) {
     </div>
   `;
 
+  //displays pokemon types
   const typeSection = document.createElement("div");
   typeSection.className = "pokemon-types";
   typeSection.innerHTML = `
@@ -141,6 +144,7 @@ function renderPokemonDetails(pokemon, container) {
     </div>
   `;
 
+  //displays pokemon stats
   const statsSection = document.createElement("div");
   statsSection.className = "pokemon-stats";
   statsSection.innerHTML = `
@@ -165,7 +169,7 @@ function renderPokemonDetails(pokemon, container) {
         .join("")}
     </div>
   `;
-
+  //displays pokemon information
   const infoSection = document.createElement("div");
   infoSection.className = "pokemon-info";
   infoSection.innerHTML = `
@@ -182,19 +186,22 @@ function renderPokemonDetails(pokemon, container) {
     </div>
   `;
 
+  //displays pokemon's moves
   const moveSection = document.createElement("div");
   moveSection.className = "pokemon-move";
   moveSection.innerHTML = `
     <h3>Moves</h3>
     <div class="info-grid">
-        ${pokemon.moves.map(
-          (move) =>
-            `<div class="info-item">
+        ${pokemon.moves
+          .map(
+            (move) =>
+              `<div class="info-item">
                 <span class="info-value">
                     ${capitalize(move.move.name)}
                 </span>
             </div>`
-        ).join("")}
+          )
+          .join("")}
     </div>
   `;
 
@@ -220,11 +227,13 @@ function renderPokemonDetails(pokemon, container) {
   container.appendChild(pokemonDetails);
 }
 
+// capitalizes the first letter of the word
 function capitalize(word) {
   if (!word) return "";
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
+//Displays an error message on the screen
 function displayError(message) {
   const contentArea = document.querySelector("main");
   if (!contentArea) return;
@@ -236,12 +245,6 @@ function displayError(message) {
       <button class="back-button" onclick="window.history.back()">← Back to Pokédex</button>
     </div>
   `;
-}
-
-function initFilters() {
-  import("../js/filter.js").then((module) => {
-    module.initFilters();
-  });
 }
 
 document.addEventListener("DOMContentLoaded", initPokemonPage);

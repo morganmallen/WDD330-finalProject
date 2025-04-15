@@ -1,5 +1,6 @@
 import { createStarElement } from "./favorites.js";
 
+//Capitalizes the first letter of each word
 function capitalize(word) {
   if (!word) return "";
   return word.charAt(0).toUpperCase() + word.slice(1);
@@ -7,6 +8,7 @@ function capitalize(word) {
 
 const CACHE_EXPIRY = 24 * 60 * 60 * 1000;
 
+//Fetches and caches the list of 151 Pokemon
 export async function getPokemonList() {
   const cachedData = getFromCache("pokemon-list");
 
@@ -26,6 +28,7 @@ export async function getPokemonList() {
   return data.results;
 }
 
+// Fetch and catch details of each individual pokemon
 export async function getPokemonDetails(url) {
   const cacheKey = `pokemon-${url.split("/").filter(Boolean).pop()}`;
 
@@ -60,6 +63,7 @@ export async function getPokemonDetails(url) {
   return data;
 }
 
+// Removes the oldest cached Pokemon when storage is full
 function clearOldestCacheItems() {
   try {
     const keys = [];
@@ -93,6 +97,7 @@ function clearOldestCacheItems() {
   }
 }
 
+//saves data to localStorage
 function saveToCache(key, data) {
   try {
     const cacheItem = {
@@ -119,6 +124,7 @@ function saveToCache(key, data) {
   }
 }
 
+// Retrieves data from the cache
 function getFromCache(key) {
   try {
     const cacheItem = localStorage.getItem(key);
@@ -141,6 +147,7 @@ function getFromCache(key) {
   }
 }
 
+//Renders the pokemon cards with pagination
 export async function renderPokemonCards(page = 1, itemsPerPage = 20) {
   const pokedex = document.getElementById("pokedex");
 
@@ -226,6 +233,7 @@ export async function renderPokemonCards(page = 1, itemsPerPage = 20) {
   }
 }
 
+//creates the pokemon cards and displays some details
 export function createPokemonCard(pokemon) {
   const card = document.createElement("div");
   card.className = "pokemon-card";
@@ -266,6 +274,7 @@ export function createPokemonCard(pokemon) {
   return card;
 }
 
+//Redirects user to the individual page of the Pokemon
 function navigateToPokemonPage(pokemonId) {
   const currentPath = window.location.pathname;
   let pathPrefix = "./";

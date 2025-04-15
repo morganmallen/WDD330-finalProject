@@ -1,12 +1,15 @@
+//gets favorites from localStorage
 export function getFavorites() {
   const favorites = localStorage.getItem("pokemon-favorites");
   return favorites ? JSON.parse(favorites) : [];
 }
 
+// saves favorites list to localStorage
 export function saveFavorites(favorites) {
   localStorage.setItem("pokemon-favorites", JSON.stringify(favorites));
 }
 
+//adds pokemon to the favorites list
 export function addToFavorites(pokemon) {
   const favorites = getFavorites();
 
@@ -25,6 +28,7 @@ export function addToFavorites(pokemon) {
   return false;
 }
 
+// removes a pokemon from the favorites list
 export function removeFromFavorite(pokemonId) {
   const favorites = getFavorites();
   const updatedFavorites = favorites.filter((fav) => fav.id !== pokemonId);
@@ -33,11 +37,13 @@ export function removeFromFavorite(pokemonId) {
   return updatedFavorites.length !== favorites.length;
 }
 
+//Checks if a pokemon is a favorite
 export function isFavorite(pokemonId) {
   const favorites = getFavorites();
   return favorites.some((fav) => fav.id === pokemonId);
 }
 
+//toggles a pokemon's favorite status
 export function toggleFavorite(pokemon) {
   if (isFavorite(pokemon.id)) {
     removeFromFavorite(pokemon.id);
@@ -48,6 +54,7 @@ export function toggleFavorite(pokemon) {
   }
 }
 
+//Creates a star that when clicked, toggles whether the pokemon is a favorite or not.
 export function createStarElement(pokemon, callback) {
   const starContainer = document.createElement("div");
   starContainer.className = "star-container";
